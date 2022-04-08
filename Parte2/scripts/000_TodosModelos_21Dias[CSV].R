@@ -1,31 +1,29 @@
 #### Script para Avaliação dos Modelos para 21 Dias ####
 
 #####  1.0 - Declaração das Bibliotecas #####
-if (1 == 1){
-    rm(list=ls(all=TRUE))
-    set.seed(19)
+rm(list=ls(all=TRUE))
+set.seed(19)
 
-    library(compiler)
-    enableJIT(3)
+library(compiler)
+enableJIT(3)
     
-    library(lme4)
+library(lme4)
     
-    #remove.packages("rlang")
-    #install.packages("rlang")
-    library(tidyverse)  
+#remove.packages("rlang")
+#install.packages("rlang")
+library(tidyverse)  
     
-    library(gdata)
-    library(nlme)
-    library(RVAideMemoire)
-    library(readODS)
-    library(car)
-    require(MASS)
-    library(predictmeans)
-    library(ggplot2)
-    library(ggpubr)
-    library(nlraa)
-}
-     
+library(gdata)
+library(nlme)
+library(RVAideMemoire)
+library(readODS)
+library(car)
+require(MASS)
+library(predictmeans)
+library(ggplot2)
+library(ggpubr)
+library(nlraa)
+
 
 ##### 2.0 - Leitura dos dados ##### 
 dados <- read.csv("D:\\Solar2\\Parte2\\datasets\\csv\\1_21.csv")

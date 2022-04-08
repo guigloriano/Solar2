@@ -2,31 +2,28 @@
 
 #####  1.0 - Declaração das Bibliotecas #####
 
-if (1 == 1){
-  rm(list=ls(all=TRUE))
-  set.seed(19)
+rm(list=ls(all=TRUE))
+set.seed(19)
+
+library(compiler)
+enableJIT(3)
+
+library(lme4)
   
-  library(compiler)
-  enableJIT(3)
-  
-  library(lme4)
-  
-  #remove.packages("rlang")
-  #install.packages("rlang")
-  library(tidyverse)  
-  
-  library(gdata)
-  library(nlme)
-  library(RVAideMemoire)
-  library(readODS)
-  library(car)
-  require(MASS)
-  library(predictmeans)
-  library(ggplot2)
-  library(ggpubr)
-  library(nlraa)
-  
-}
+#remove.packages("rlang")
+#install.packages("rlang")
+library(tidyverse)  
+
+library(gdata)
+library(nlme)
+library(RVAideMemoire)
+library(readODS)
+library(car)
+require(MASS)
+library(predictmeans)
+library(ggplot2)
+library(ggpubr)
+library(nlraa)
 
 
 ##### 2.0 - Leitura dos dados ##### 
@@ -420,27 +417,20 @@ TableMetrics2 <- data.frame(Metrics, Model_M0a, Model_M1a, Model_M2a, Model_M3a,
 
 
 
-break
-
-
-
-
-
-
 #### GrÃ¡fico dos valores preditos x resÃduos
 
 par(mai=c(1,1,0.3,0.3))
-res <- as.numeric(residuals(M9))
-plot(pred9, res, ylim=c(-1.5,1.5), ylab="Residuals",xlab="Predicted values")
+res <- as.numeric(residuals(M9a))
+plot(pred9a, res, ylim=c(-1.5,1.5), ylab="Residuals",xlab="Predicted values")
 
 #### GrÃ¡fico dos valores registrados x preditos
 
-plot(DA[,6], pred9, ylab="Predicted values", xlab="Registered values")
+plot(DA2[,6], pred9a, ylab="Predicted values", xlab="Registered values")
 
 
 ##### Graficos dos dias #####
 
-id.fi <- cumsum(as.numeric(ftable(D[,1]))) 
+id.fi <- cumsum(as.numeric(ftable(D2[,1]))) 
 id.in <- c(1,id.fi+1)
 
 dia <- 1
@@ -449,27 +439,27 @@ dia <- 1
 
 xi <- id.in[dia] 
 xf <- id.fi[dia]
-Di <- cumsum(D[xi:xf,6])
-plot(D[xi:xf,2], Di, pch=19, lwd=2, ylab="X", xlab="Tempo", xlim=c(0,length(Di)))
-points(D[xi:xf,2], Di, col="black", type="l", lwd=2)
+Di <- cumsum(D2[xi:xf,6])
+plot(D2[xi:xf,2], Di, pch=19, lwd=2, ylab="X", xlab="Tempo", xlim=c(0,length(Di)))
+points(D2[xi:xf,2], Di, col="black", type="l", lwd=2)
 
 ##### tempo x PCD - Acumulados
 
 xi <- id.in[dia] 
 xf <- id.fi[dia]
-Do <- DA[xi:xf,6]
-De <- as.numeric(pred9[xi:xf])
+Do <- DA2[xi:xf,6]
+De <- as.numeric(pred9a[xi:xf])
 nd <- length(Do)
 
 ## Log-scale
 
-plot(D[xi:xf,2], Do, col="grey70", pch=19, lwd=2, ylab="Y's values", xlab="Time", xlim=c(0, 77), ylim=c(3,13))
-points(D[xi:xf,2], De, col="black", type="l", lwd=2)
+plot(D2[xi:xf,2], Do, col="grey70", pch=19, lwd=2, ylab="Y's values", xlab="Time", xlim=c(0, 77), ylim=c(3,13))
+points(D2[xi:xf,2], De, col="black", type="l", lwd=2)
 
 ## origina;-scale
 
-plot(D[xi:xf,2], exp(Do), pch=19, col="grey70", lwd=2, ylab="X", xlab="Tempo", xlim=c(0,length(Do)))
-points(D[xi:xf,2], exp(De), col="black", type="l", lwd=2)
+plot(D2[xi:xf,2], exp(Do), pch=19, col="grey70", lwd=2, ylab="X", xlab="Tempo", xlim=c(0,length(Do)))
+points(D2[xi:xf,2], exp(De), col="black", type="l", lwd=2)
 
 ###########################          
 #### Percentuais em relaÃ§Ã£o
@@ -480,32 +470,3 @@ perc
 
 EQM <- round(mean((Do - De)^2), 4)
 EQM
-
-PE <- c(-0.0697, 0.6212, 0.8907, -0.5001, -0.2452, 0.3554, -0.4009, -0.0659, 0.2027, 0.2923, 0.0370, -0.0278)
-barplot(PE, ylim=c(-1,1), xlab="Days", ylab="Percentage")
-
-text(0.8, -0.95, "Day 1", cex=0.7)
-text(1.9, -0.95, "Day 2", cex=0.7)
-text(3.1, -0.95, "Day 3", cex=0.7)
-text(4.3, -0.95, "Day 4", cex=0.7)
-text(5.5, -0.95, "Day 5", cex=0.7)
-text(6.7, -0.95, "Day 6", cex=0.7)
-text(7.9, -0.95, "Day 7", cex=0.7)
-text(9.1, -0.95, "Day 8", cex=0.7)
-text(10.3, -0.95, "Day 9", cex=0.7)
-text(11.5, -0.95, "Day 10", cex=0.7)
-text(12.7, -0.95, "Day 11", cex=0.7)
-text(13.9, -0.95, "Day 12", cex=0.7)
-
-text(0.8, -0.0997, "-0.0697", cex=0.6)
-text(1.9, 0.6612, "0.6212", cex=0.6)
-text(3.1, 0.9307, "0.8907", cex=0.6)
-text(4.3, -0.5401, "-0.5001", cex=0.6)
-text(5.5, -0.2852, "-0.2452", cex=0.6)
-text(6.7, 0.3954, "0.3554", cex=0.6)
-text(7.9, -0.4409, "-0.4009", cex=0.6)
-text(9.1, -0.1059, "-0.0659", cex=0.6)
-text(10.3, 0.2427, "0.2027", cex=0.6)
-text(11.5, 0.3323, "0.2923", cex=0.6)
-text(12.7, 0.0770, "0.0370", cex=0.6)
-text(13.9, -0.0678, "-0.0278", cex=0.6)
