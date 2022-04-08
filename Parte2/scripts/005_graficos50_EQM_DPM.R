@@ -106,10 +106,10 @@ png(filename = dest_dpm, width = 720, height = 480, units = 'px')
 
 new_bar_DPM2 <- data.frame("dia" = seq(1,100), "DPM" = abs(Dim))
 
-DPM_corrigido <- ggplot(data = new_bar_DPM , aes(x=dia, y = DPM, color="gray")) + 
+DPM_corrigido <- ggplot(data = new_bar_DPM2 , aes(x=dia, y = DPM, color="gray")) + 
   theme_bw() + geom_bar(stat="identity", position="dodge", color="black",) +
   #  scale_y_continuous(breaks = seq(from = min(Dim), to = max(Dim), by = 1), name = "Percentagem (%)") +
-  scale_y_continuous(limits = c(0, max(Dim)), name = "Percentagem (%)") +
+  scale_y_continuous(limits = c(0, max(new_bar_DPM2$DPM) ), name = "Percentagem (%)") +
   scale_x_continuous(breaks = 5*0:106, expand = c(0.01,0.01), name = "Dias") +
   #  geom_smooth(aes(y = DPM, color = "Local Regression Fitting", method="loess", se = F))+
   #, linetype = "dashed") +
