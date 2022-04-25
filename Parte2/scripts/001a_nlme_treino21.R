@@ -94,7 +94,7 @@ M9 <- nlme(PDC ~ f.logi(TIME, alpha0, beta0, beta1),
            start=v9, groups = ~ DIA)
 
 pred9 <- predict(M9)
-EQM9 <- round(mean((pred9 - DA[,6])^2), 4)
+EQM9 <- round(mean((pred9 - DA[,6])^2), 5)
 
 summary(M9)
 # sigma(M9) # MSE: 38.16482
@@ -114,14 +114,14 @@ id.in <- c(1,id.fi+1)
 
 
 ##### 3.1 - Graficos do Dia 1 #####
-dia <- 1
+dia <- 2
 xi <- id.in[1] 
 xf <- id.fi[1]
 
 
 ###### 3.1.1 - Tempo x PCD (Observado) ###### 
 Dio <- DA[xi:xf,6]
-plot(DA[xi:xf,2], Dio, type="l", lwd=2, ylab="Valores Y", xlab="Tempo", xlim=c(0,length(Dio)), col="black")
+plot(DA[xi:xf,2], Dio, type="l", lwd=2, ylab="Values Y", xlab="Tempo", xlim=c(0,length(Dio)), col="black")
 points(DA[xi:xf,2], Dio, pch=1, lwd=2, col="black")
 
 

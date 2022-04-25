@@ -2,7 +2,7 @@
 
 #####  1.0 - Declaração das Bibliotecas #####
 
-rm(list=ls(all=TRUE))
+# rm(list=ls(all=TRUE))
 set.seed(19)
 
 library(compiler)
@@ -433,7 +433,7 @@ plot(DA2[,6], pred9a, ylab="Predicted values", xlab="Registered values")
 id.fi <- cumsum(as.numeric(ftable(D2[,1]))) 
 id.in <- c(1,id.fi+1)
 
-dia <- 1
+dia <- 2
 
 ##### tempo x PCD - Acumulados
 

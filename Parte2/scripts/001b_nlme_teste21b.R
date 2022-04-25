@@ -40,10 +40,17 @@ for(j in 1:length(TodosCaminhos)){
 
 xi <- numeric()
 xf <- numeric()
+
 Dip_list <- numeric()
 Dio_list <- numeric()
+
+ADIO_O_list <- numeric()
+ADIP_O_list <- numeric()
+
 Dim <- numeric()
 EQMi <- numeric()
+
+j = 1
 
 for(j in 1:length(TodosCaminhos)){
   
@@ -84,11 +91,24 @@ for(j in 1:length(TodosCaminhos)){
   }
   
   NDA <- ND
+  
+  
+  
+  ##### 1.7 - Manter os Valores Originais #####
+  NDA$IRR_O <- NDA[,3]      
+  NDA$PDC_O <- NDA[,6]      
+  NDA$AIRR_O <- AIRR[-1]     
+  NDA$APDC_O <- APDC[-1]
+  
+  
+  
+  ##### 1.8 - Troca para IRR e PDC acumulados #####
   NDA[,3] <- AIRR[-1]     
   NDA[,6] <- APDC[-1]
   
   
-  ##### 1.7 - Transformação Log #####
+  
+  ##### 1.9 - Transformação Log #####
   NDA[,1] <- factor(NDA[,1])     
   NDA[,2] <- NDA[,2] - 1
   NDA[,3] <- log(NDA[,3])
@@ -111,6 +131,7 @@ for(j in 1:length(TodosCaminhos)){
   
   
   ###### 3.1 - Tempo x PDC (Observado e Esperado) #####
+  i = 1
   for(i in 1:length(id.fi)){
     
     # i = dia
@@ -134,7 +155,6 @@ for(j in 1:length(TodosCaminhos)){
     ######### 3.1.2 - Cálculo do PDC Predito ##### 
     Dip <- as.numeric(pred9[xi[dia]:xf[dia]])
     points(NDA[xi[dia]:xf[dia],2], Dip, col="red", type="l", lwd=2)
-    
     legend("topleft", legend=c("Observado","Esperado"), col=c("black","red"), lty=1, pch=c(1, NA), lwd=2)
     
     
@@ -145,9 +165,19 @@ for(j in 1:length(TodosCaminhos)){
     Dio_list[ (i+(j-1)+(j-1)*20) ] <- Dio[length(Dio)]
     
     
+    
+    
+    ######### 3.1.3 - Testes Auxiliares para Cálculo da POT. REAL ##### 
+    ADIO_O_list[ (i+(j-1)+(j-1)*20) ] <- NDA$APDC_O[xf[dia]]
+    Dip_O <- exp(Dip)
+    ADIP_O_list[ (i+(j-1)+(j-1)*20) ] <- Dip_O[length(Dip_O)]
+    
+    
+    
+    
     ######### 3.2 - Cálculo do Erro Quadrático Médio Diário #####
     EQMi[ (i+(j-1)+(j-1)*20) ] <- round(mean((Dio - Dip)^2), 6)
-#    EQMi[ (i+(j-1)+(j-1)*20) ] <- round(mean((Dio[length(Dio)] - Dip[length(Dip)])^2), 6)
+    #    EQMi[ (i+(j-1)+(j-1)*20) ] <- round(mean((Dio[length(Dio)] - Dip[length(Dip)])^2), 6)
     
     
     ######### 3.4 - Cálculo da Diferença Percentual Média  ######    
@@ -171,17 +201,23 @@ for(j in 1:length(TodosCaminhos)){
   
   
   ######### 3.5 - Gráfico: DIP x DIO #####
-  nome_arquivo <- paste ("energia_", (i+(j-1)+(j-1)*20), ".png", sep="")
+  nome_arquivo <- paste ("energiaTACC_", (i+(j-1)+(j-1)*20), ".png", sep="")
   pathDest <- paste(local_pasta, "graphs\\2 - DIP x DIO\\", sep = "")
   fileDest <- paste(pathDest, nome_arquivo, sep = "")
   png(filename = fileDest, width = 720, height = 480, units = 'px')
   
   sm <- seq(1,length(id.fi)*j)
   p = ggplot() + theme_bw() + 
-    geom_line(aes(x = sm, y = Dip_list, group=1), color = "blue", size = 0.5) +
-    geom_line(aes(x = sm, y = Dio_list, group=2), color = "red", size = 0.5) +
-    geom_point(aes(x = sm, y = Dip_list, group=1), color = "blue", size = 1) +
-    geom_point(aes(x = sm, y = Dio_list, group=2), color = "red", size = 1) +
+#    geom_line(aes(x = sm, y = Dip_list, group=1), color = "blue", size = 0.5) +
+#    geom_line(aes(x = sm, y = Dio_list, group=2), color = "red", size = 0.5) +
+#    geom_point(aes(x = sm, y = Dip_list, group=1), color = "blue", size = 1) +
+#    geom_point(aes(x = sm, y = Dio_list, group=2), color = "red", size = 1) +
+    
+    geom_line(aes(x = sm, y = ADIP_O_list, group=1), color = "blue", size = 0.5) +
+    geom_line(aes(x = sm, y = ADIO_O_list, group=2), color = "red", size = 0.5) +
+    geom_point(aes(x = sm, y = ADIP_O_list, group=1), color = "blue", size = 1) +
+    geom_point(aes(x = sm, y = ADIO_O_list, group=2), color = "red", size = 1) +
+    
     xlab('Dias') +
     ylab('Potência') + 
     scale_x_continuous(breaks=seq(0, 105, 5))  +
@@ -220,8 +256,8 @@ for(j in 1:length(TodosCaminhos)){
     #  ggtitle("Differences (percentage): Observed and Estimated") + 
     theme(plot.title = element_text(hjust = 0.5)) +
     labs(y= "Diferenca Percentual Media", x = "Dias") + scale_y_continuous(limits = c(min(Dim)-.03,max(Dim)+.03))
-
+  
   print(p)
   dev.off()
-
+  
 }
