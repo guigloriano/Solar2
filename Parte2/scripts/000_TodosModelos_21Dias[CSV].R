@@ -1,8 +1,8 @@
 #### Script para Avaliação dos Modelos para 21 Dias ####
 
 #####  1.0 - Declaração das Bibliotecas #####
-rm(list=ls(all=TRUE))
-set.seed(19)
+# rm(list=ls(all=TRUE))
+# set.seed(19)
 
 library(compiler)
 enableJIT(3)
@@ -86,7 +86,7 @@ DA <- data.frame(DA)
 
 ##### 3.0 - Gráficos dos dias 1 e 2 #####
 plot(DA[id.in[1]:id.fi[1],2], exp(DA[id.in[1]:id.fi[1],6]), type="l", 
-     lwd=2, ylab="Power Generated", xlab="Time")
+     lwd=2, ylab="Accumulated Solar Power", xlab="Time", xlim=c(0,80), ylim=c(0,330000))
 points(DA[id.in[1]:id.fi[1],2], exp(DA[id.in[1]:id.fi[1],6]), pch=19)
         
 plot(DA[id.in[2]:id.fi[2],2], exp(DA[id.in[2]:id.fi[2],6]), type="l", 
@@ -94,7 +94,7 @@ plot(DA[id.in[2]:id.fi[2],2], exp(DA[id.in[2]:id.fi[2],6]), type="l",
 points(DA[id.in[2]:id.fi[2],2], exp(DA[id.in[2]:id.fi[2],6]), pch=19)
         
 plot(DA[id.in[1]:id.fi[1],2], DA[id.in[1]:id.fi[1],6], type="l", lwd=2, 
-     ylab="Log-measures", xlab="Time")
+     ylab="Log of the accumulated Solar Power", xlab="Time", xlim=c(0,80), ylim=c(4,12.7))
 points(DA[id.in[1]:id.fi[1],2], DA[id.in[1]:id.fi[1],6], pch=19)
 
 plot(DA[id.in[2]:id.fi[2],2], DA[id.in[2]:id.fi[2],6], type="l", lwd=2, 
@@ -375,7 +375,7 @@ plot(pred9, res, ylim=c(-1.5,1.5), ylab="Residuals",xlab="Predicted values")
 
 
 ####### 5.2 - Grafico dos valores registrados x preditos ####### 
-plot(DA[,6], pred9, ylab="Predicted values", xlab="Registered values")
+plot(DA[,6], pred9, ylab="Predicted values", xlab="Observed values")
           
 
 

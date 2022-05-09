@@ -1,4 +1,15 @@
 
+
+
+
+########################################################################
+####                                                                ####
+####      SCRIPT DESATUALIZADO - UTILIZAR A VERSÃO b (abaixo)       ####
+####                                                                ####
+########################################################################
+
+
+
 #### 0.0 - Inicio do Código Automatizado para Executar os 105 Dias####
 
 ##### 0.1 - Definição do Caminho "raiz" do script ####

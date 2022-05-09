@@ -97,6 +97,67 @@ pred9 <- predict(M9)
 EQM9 <- round(mean((pred9 - DA[,6])^2), 5)
 
 summary(M9)
+
+
+
+
+
+
+# https://stackoverflow.com/questions/40901445/function-to-calculate-r2-r-squared-in-r
+R2_treino = cor(pred9, DA$PDC) ^ 2
+
+
+
+
+rss_treino <- sum((pred9 - DA$PDC) ^ 2)  ## residual sum of squares
+tss_treino <- sum((DA$PDC - mean(DA$PDC)) ^ 2)  ## total sum of squares
+rsq_treino <- 1 - rss_treino/tss_treino
+
+
+
+
+
+# 2. R2 Score components
+# 2.1. Average of actual data
+avr_y_actual <- mean(DA$PDC)
+
+# 2.2. Total sum of squares
+ss_total <- sum((DA$PDC - avr_y_actual)^2)
+
+# 2.3. Regression sum of squares
+ss_regression <- sum((pred9- avr_y_actual)^2)
+
+# 2.4. Residual sum of squares
+ss_residuals <- sum((DA$PDC - pred9)^2)
+
+# 3. R2 Score
+r2 <- 1 - ss_residuals / ss_total
+
+
+
+
+
+MSE_treino = (sum(DA$PDC - pred9)^2)/length(pred9)
+
+
+
+# https://www.statology.org/adjusted-r-squared-in-r/
+AdjustedR2_teste = 1 - ( (1-R2_teste)*(1625-1)/(1625-2-1) )
+
+# Adjusted R2 = 1 - [(1-R2)*(n-1)/(n-k-1)]
+# where:
+
+# R2: The R2 of the model
+# n: The number of observations         = 1625
+# k: The number of predictor variables  = 5
+
+
+
+
+
+
+
+
 # sigma(M9) # MSE: 38.16482
 
 AIC(M9)   # -15395.29

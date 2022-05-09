@@ -48,7 +48,13 @@ ADIO_O_list <- numeric()
 ADIP_O_list <- numeric()
 
 Dim <- numeric()
+Dim2 <- numeric()
 EQMi <- numeric()
+
+
+PDC_list <- numeric() 
+pred9_list <- numeric()
+
 
 j = 1
 
@@ -130,6 +136,10 @@ for(j in 1:length(TodosCaminhos)){
   id.in <- c(1,id.fi+1)
   
   
+  
+  PDC_list <- append(PDC_list, NDA$PDC)
+  pred9_list <- append(pred9_list, pred9)
+  
   ###### 3.1 - Tempo x PDC (Observado e Esperado) #####
   i = 1
   for(i in 1:length(id.fi)){
@@ -182,6 +192,8 @@ for(j in 1:length(TodosCaminhos)){
     
     ######### 3.4 - Cálculo da Diferença Percentual Média  ######    
     Dim[ (i+(j-1)+(j-1)*20) ] <- round(mean(( (exp(Dio) - exp(Dip) ) / exp(Dip) ) * 100), 6)
+    Dim2[ (i+(j-1)+(j-1)*20) ] <- round(mean(( (Dio - Dip) / Dip ) * 100), 6)
+    
     
     out <- (i+(j-1)+(j-1)*20)
     print(out)
@@ -208,15 +220,15 @@ for(j in 1:length(TodosCaminhos)){
   
   sm <- seq(1,length(id.fi)*j)
   p = ggplot() + theme_bw() + 
-#    geom_line(aes(x = sm, y = Dip_list, group=1), color = "blue", size = 0.5) +
-#    geom_line(aes(x = sm, y = Dio_list, group=2), color = "red", size = 0.5) +
-#    geom_point(aes(x = sm, y = Dip_list, group=1), color = "blue", size = 1) +
-#    geom_point(aes(x = sm, y = Dio_list, group=2), color = "red", size = 1) +
+    geom_line(aes(x = sm, y = Dip_list, group=1), color = "blue", size = 0.5) +
+    geom_line(aes(x = sm, y = Dio_list, group=2), color = "red", size = 0.5) +
+    geom_point(aes(x = sm, y = Dip_list, group=1), color = "blue", size = 1) +
+    geom_point(aes(x = sm, y = Dio_list, group=2), color = "red", size = 1) +
     
-    geom_line(aes(x = sm, y = ADIP_O_list, group=1), color = "blue", size = 0.5) +
-    geom_line(aes(x = sm, y = ADIO_O_list, group=2), color = "red", size = 0.5) +
-    geom_point(aes(x = sm, y = ADIP_O_list, group=1), color = "blue", size = 1) +
-    geom_point(aes(x = sm, y = ADIO_O_list, group=2), color = "red", size = 1) +
+#    geom_line(aes(x = sm, y = ADIP_O_list, group=1), color = "blue", size = 0.5) +
+#    geom_line(aes(x = sm, y = ADIO_O_list, group=2), color = "red", size = 0.5) +
+#    geom_point(aes(x = sm, y = ADIP_O_list, group=1), color = "blue", size = 1) +
+#    geom_point(aes(x = sm, y = ADIO_O_list, group=2), color = "red", size = 1) +
     
     xlab('Dias') +
     ylab('Potência') + 
@@ -261,3 +273,34 @@ for(j in 1:length(TodosCaminhos)){
   dev.off()
   
 }
+
+
+
+# https://stackoverflow.com/questions/40901445/function-to-calculate-r2-r-squared-in-r
+R2_teste = cor(PDC_list, pred9_list) ^ 2
+
+
+
+rss_test <- sum((pred9_list - PDC_list) ^ 2)  ## residual sum of squares
+tss_test <- sum((PDC_list - mean(PDC_list)) ^ 2)  ## total sum of squares
+rsq_test <- 1 - rss_test/tss_test
+
+
+
+MSE_teste = (sum(PDC_list - pred9_list)^2)/length(pred9_list)
+
+
+
+
+# https://www.statology.org/adjusted-r-squared-in-r/
+AdjustedR2_teste = 1 - ( (1-R2_teste)*(7970-1)/(7970-2-1) )
+
+# Adjusted R2 = 1 - [(1-R2)*(n-1)/(n-k-1)]
+# where:
+
+# R2: The R2 of the model
+# n: The number of observations         = 7970
+# k: The number of predictor variables  = 5
+
+
+

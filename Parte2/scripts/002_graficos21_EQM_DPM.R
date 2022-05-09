@@ -28,7 +28,7 @@ graph_extra <- paste(local_pasta, "graphs\\5 - Diversos\\", sep = "")
 cod_treino <- paste(local_pasta, "scripts\\001a_nlme_treino21.R", sep = "")
 source(cod_treino)
 
-cod_teste <- paste(local_pasta, "scripts\\001b_nlme_teste21.R", sep = "")
+cod_teste <- paste(local_pasta, "scripts\\001b_nlme_teste21b.R", sep = "")
 source(cod_teste)
 
 
@@ -69,8 +69,8 @@ dev.off()
 
 
 
-###### 2.2- Grafico da Dif. Per. Media Original  ####
-dpm_png <- paste ("DifPerc2_original_105.png", sep="")
+###### 2.2.1. - Grafico da Dif. Per. Media Original  (DIM = Exp(DIO/DIP) ####
+dpm_png <- paste ("DifPercEXP_original_105.png", sep="")
 dest_dpm <- paste(graph_extra, dpm_png, sep = "")
 png(filename = dest_dpm, width = 720, height = 480, units = 'px')
 
@@ -94,6 +94,29 @@ png(filename = dest_dpm, width = 720, height = 480, units = 'px')
 dev.off()
 
 
+###### 2.2.2- Grafico da Dif. Per. Media Original  ####
+dpm_png <- paste ("DifPerc_original_105.png", sep="")
+dest_dpm <- paste(graph_extra, dpm_png, sep = "")
+png(filename = dest_dpm, width = 720, height = 480, units = 'px')
+
+new_bar_DPM <- data.frame("dia" = seq(1,105), "DPM" = Dim2)
+
+DPM_Original <- ggplot(data = new_bar_DPM , aes(x=dia, y = DPM, color="gray")) + 
+  theme_bw() + geom_bar(stat="identity", position="dodge", color="black",) +
+  #  scale_y_continuous(breaks = seq(from = min(Dim), to = max(Dim), by = 1), name = "Percentagem (%)") +
+  scale_y_continuous(limits = c(min(Dim2),max(Dim2)), name = "Percentage (%)") +
+  scale_x_continuous(breaks = 5*0:111, expand = c(0.01,0.01), name = "Days") +
+  #  geom_smooth(aes(y = DPM, color = "Local Regression Fitting", method="loess", se = F))+
+  #, linetype = "dashed") +
+  theme(axis.title.y = element_text(hjust = 0.5, color = 'black', size=20),) + 
+  # ggtitle("Diferença Percentual Média Diária") +  theme_bw() + 
+  #  ggtitle("Percent Difference Average Daily") ++
+  theme(text = element_text(size=20), axis.text.x = element_text(angle = 45))
+
+print(DPM_Original)
+
+plot(DPM_Original)
+dev.off()
 
 
 
