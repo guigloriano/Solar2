@@ -142,7 +142,7 @@ MSE_treino = (sum(DA$PDC - pred9)^2)/length(pred9)
 
 
 # https://www.statology.org/adjusted-r-squared-in-r/
-AdjustedR2_teste = 1 - ( (1-R2_teste)*(1625-1)/(1625-2-1) )
+AdjustedR2_treino = 1 - ( (1-rsq_treino)*(1625-1)/(1625-2-1) )
 
 # Adjusted R2 = 1 - [(1-R2)*(n-1)/(n-k-1)]
 # where:
@@ -150,6 +150,9 @@ AdjustedR2_teste = 1 - ( (1-R2_teste)*(1625-1)/(1625-2-1) )
 # R2: The R2 of the model
 # n: The number of observations         = 1625
 # k: The number of predictor variables  = 5
+
+
+
 
 
 

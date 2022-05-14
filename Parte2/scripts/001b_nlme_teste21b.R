@@ -276,6 +276,12 @@ for(j in 1:length(TodosCaminhos)){
 
 
 
+
+PDC_list[length(pred9):length(PDC_list)]
+
+
+
+
 # https://stackoverflow.com/questions/40901445/function-to-calculate-r2-r-squared-in-r
 R2_teste = cor(PDC_list, pred9_list) ^ 2
 
@@ -283,7 +289,7 @@ R2_teste = cor(PDC_list, pred9_list) ^ 2
 
 rss_test <- sum((pred9_list - PDC_list) ^ 2)  ## residual sum of squares
 tss_test <- sum((PDC_list - mean(PDC_list)) ^ 2)  ## total sum of squares
-rsq_test <- 1 - rss_test/tss_test
+rsq_teste <- 1 - rss_test/tss_test
 
 
 
@@ -293,7 +299,7 @@ MSE_teste = (sum(PDC_list - pred9_list)^2)/length(pred9_list)
 
 
 # https://www.statology.org/adjusted-r-squared-in-r/
-AdjustedR2_teste = 1 - ( (1-R2_teste)*(7970-1)/(7970-2-1) )
+AdjustedR2_teste = 1 - ( (1-rsq_teste)*(7970-1)/(7970-2-1) )
 
 # Adjusted R2 = 1 - [(1-R2)*(n-1)/(n-k-1)]
 # where:
@@ -301,6 +307,36 @@ AdjustedR2_teste = 1 - ( (1-R2_teste)*(7970-1)/(7970-2-1) )
 # R2: The R2 of the model
 # n: The number of observations         = 7970
 # k: The number of predictor variables  = 5
+
+
+
+# x_i     :     amostra
+# x_barra :     média amostral
+
+# y_i     :     valor predito
+# y_barra :     média predita 
+
+
+PDC_list        # amostras 
+pred9_list      # previstos
+
+# equação do coeficiente de correlação (abaixo)
+
+A = PDC_list - mean(PDC_list)
+B = pred9_list - mean(pred9_list)
+
+
+numerador = sum(A * B)
+
+
+C = sum (A^2)
+D = sum (B^2)
+
+denominador = sqrt( C * D )
+
+
+r = numerador/denominador
+
 
 
 
