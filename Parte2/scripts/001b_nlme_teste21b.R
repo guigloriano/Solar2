@@ -280,10 +280,6 @@ for(j in 1:length(TodosCaminhos)){
   
 }
 
-###############################################################
-
-
-
 
 
 #### 5.0 - Métricas para o Treino ####
@@ -382,6 +378,44 @@ D_teste = sum (B_teste^2)
 denominador_teste = sqrt( C_teste * D_teste )
 
 r_teste = numerador_teste/denominador_teste
+
+
+
+
+
+#### 5.3 - MSE Para Todos os Dados ####
+
+PDC_full <- numeric()
+pred9_full <- numeric()
+
+PDC_full <- append(PDC_list_treino, PDC_list_teste)
+pred9_full <- append(pred9_list_treino, pred9_list_teste)
+
+MSE_full = (sum(PDC_full - pred9_full)^2)/length(pred9_full)
+
+
+
+
+
+#### 5.4 - Coef. de Relação para Todos os Dados
+
+
+
+A_full = PDC_full - mean(PDC_full)
+B_full = pred9_full - mean(pred9_full)
+
+numerador_full = sum(A_full * B_full)
+
+C_full = sum (A_full^2)
+D_full = sum (B_full^2)
+
+denominador_full = sqrt( C_full * D_full )
+
+r_full = numerador_full/denominador_full
+
+
+
+
 
 
 
