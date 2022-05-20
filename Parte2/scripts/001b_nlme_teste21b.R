@@ -52,8 +52,10 @@ Dim2 <- numeric()
 EQMi <- numeric()
 
 
-PDC_list <- numeric() 
-pred9_list <- numeric()
+PDC_list_treino <- numeric() 
+pred9_list_treino <- numeric()
+PDC_list_teste <- numeric()
+pred9_list_teste <- numeric()
 
 
 j = 1
@@ -135,11 +137,6 @@ for(j in 1:length(TodosCaminhos)){
   id.fi <- cumsum(as.numeric(ftable(NDA[,1]))) 
   id.in <- c(1,id.fi+1)
   
-  
-  
-  PDC_list <- append(PDC_list, NDA$PDC)
-  pred9_list <- append(pred9_list, pred9)
-  
   ###### 3.1 - Tempo x PDC (Observado e Esperado) #####
   i = 1
   for(i in 1:length(id.fi)){
@@ -181,14 +178,10 @@ for(j in 1:length(TodosCaminhos)){
     ADIO_O_list[ (i+(j-1)+(j-1)*20) ] <- NDA$APDC_O[xf[dia]]
     Dip_O <- exp(Dip)
     ADIP_O_list[ (i+(j-1)+(j-1)*20) ] <- Dip_O[length(Dip_O)]
-    
-    
-    
-    
+ 
     ######### 3.2 - Cálculo do Erro Quadrático Médio Diário #####
     EQMi[ (i+(j-1)+(j-1)*20) ] <- round(mean((Dio - Dip)^2), 6)
     #    EQMi[ (i+(j-1)+(j-1)*20) ] <- round(mean((Dio[length(Dio)] - Dip[length(Dip)])^2), 6)
-    
     
     ######### 3.4 - Cálculo da Diferença Percentual Média  ######    
     Dim[ (i+(j-1)+(j-1)*20) ] <- round(mean(( (exp(Dio) - exp(Dip) ) / exp(Dip) ) * 100), 6)
@@ -201,8 +194,8 @@ for(j in 1:length(TodosCaminhos)){
     textoEQM <- paste("MSE:", EQMi[ (i+(j-1)+(j-1)*20) ])
     text(68, 11, textoEQM)
     dev.off()  
+    
   }
-  
   
   
   # summary(pred9)     # Coef. de Correlação: Phi =  0.98317 
@@ -210,7 +203,7 @@ for(j in 1:length(TodosCaminhos)){
   # Média dos Erros Quadráticos Médios Diários: 0.00275
   # Mean_EQM <- round( mean(EQMi) , 5)
   
-  
+
   
   ######### 3.5 - Gráfico: DIP x DIO #####
   nome_arquivo <- paste ("energiaTACC_", (i+(j-1)+(j-1)*20), ".png", sep="")
@@ -272,31 +265,93 @@ for(j in 1:length(TodosCaminhos)){
   print(p)
   dev.off()
   
+  #### 4.0 - Separação dos Valores entre Treino/Teste para avaliação ####
+  if (j == 1){
+    PDC_list_treino <- NDA$PDC
+    pred9_list_treino <- pred9
+    
+  }
+  if (j > 1){
+    PDC_list_teste <- append(PDC_list_teste, NDA$PDC)
+    pred9_list_teste <- append(pred9_list_teste, pred9)
+    
+  }
+  
+  
 }
 
+###############################################################
 
 
 
-PDC_list[length(pred9):length(PDC_list)]
 
 
+#### 5.0 - Métricas para o Treino ####
 
 
 # https://stackoverflow.com/questions/40901445/function-to-calculate-r2-r-squared-in-r
-R2_teste = cor(PDC_list, pred9_list) ^ 2
+rss_treino <- sum((pred9_list_treino - PDC_list_treino) ^ 2)  ## residual sum of squares
+tss_treino <- sum((PDC_list_treino - mean(PDC_list_treino)) ^ 2)  ## total sum of squares
+rsq_treino <- 1 - rss_treino/tss_treino
+
+# 2. R2 Score components
+# 2.1. Average of actual data
+avr_y_actual <- mean(PDC_list_treino)
+# 2.2. Total sum of squares
+ss_total <- sum((PDC_list_treino - avr_y_actual)^2)
+# 2.3. Regression sum of squares
+ss_regression <- sum((pred9_list_treino - avr_y_actual)^2)
+# 2.4. Residual sum of squares
+ss_residuals <- sum((PDC_list_treino - pred9_list_treino)^2)
+# 3. R2 Score
+r2 <- 1 - ss_residuals / ss_total
+
+
+MSE_treino = (sum(PDC_list_treino - pred9_list_treino)^2)/length(pred9_list_treino)
+
+# https://www.statology.org/adjusted-r-squared-in-r/
+AdjustedR2_treino = 1 - ( (1-rsq_treino)*(1625-1)/(1625-2-1) )
+
+# Adjusted R2 = 1 - [(1-R2)*(n-1)/(n-k-1)]
+# where:
+
+# R2: The R2 of the model
+# n: The number of observations         = 1625
+# k: The number of predictor variables  = 5
+
+
+# equação do coeficiente de correlação (abaixo)
+A_treino = PDC_list_treino - mean(PDC_list_treino)
+B_treino = pred9_list_treino - mean(pred9_list_treino)
+
+numerador_treino = sum(A_treino * B_treino)
+
+C_treino = sum (A_treino^2)
+D_treino = sum (B_treino^2)
+
+denominador_treino = sqrt( C_treino * D_treino )
+
+r_treino = numerador_treino/denominador_treino
 
 
 
-rss_test <- sum((pred9_list - PDC_list) ^ 2)  ## residual sum of squares
-tss_test <- sum((PDC_list - mean(PDC_list)) ^ 2)  ## total sum of squares
+
+
+
+
+
+
+#### 5.1 - Métricas para o Teste ####
+
+PDC_list_teste
+pred9_list_teste
+
+
+rss_test <- sum((pred9_list_teste - PDC_list_teste) ^ 2)  ## residual sum of squares
+tss_test <- sum((PDC_list_teste - mean(PDC_list_teste)) ^ 2)  ## total sum of squares
 rsq_teste <- 1 - rss_test/tss_test
 
-
-
-MSE_teste = (sum(PDC_list - pred9_list)^2)/length(pred9_list)
-
-
-
+MSE_teste = (sum(PDC_list_teste - pred9_list_teste)^2)/length(pred9_list_teste)
 
 # https://www.statology.org/adjusted-r-squared-in-r/
 AdjustedR2_teste = 1 - ( (1-rsq_teste)*(7970-1)/(7970-2-1) )
@@ -308,8 +363,6 @@ AdjustedR2_teste = 1 - ( (1-rsq_teste)*(7970-1)/(7970-2-1) )
 # n: The number of observations         = 7970
 # k: The number of predictor variables  = 5
 
-
-
 # x_i     :     amostra
 # x_barra :     média amostral
 
@@ -317,25 +370,18 @@ AdjustedR2_teste = 1 - ( (1-rsq_teste)*(7970-1)/(7970-2-1) )
 # y_barra :     média predita 
 
 
-PDC_list        # amostras 
-pred9_list      # previstos
-
 # equação do coeficiente de correlação (abaixo)
+A_teste = PDC_list_teste - mean(PDC_list_teste)
+B_teste = pred9_list_teste - mean(pred9_list_teste)
 
-A = PDC_list - mean(PDC_list)
-B = pred9_list - mean(pred9_list)
+numerador_teste = sum(A_teste * B_teste)
 
+C_teste = sum (A_teste^2)
+D_teste = sum (B_teste^2)
 
-numerador = sum(A * B)
+denominador_teste = sqrt( C_teste * D_teste )
 
-
-C = sum (A^2)
-D = sum (B^2)
-
-denominador = sqrt( C * D )
-
-
-r = numerador/denominador
+r_teste = numerador_teste/denominador_teste
 
 
 

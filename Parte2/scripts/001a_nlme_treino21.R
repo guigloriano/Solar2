@@ -102,7 +102,6 @@ summary(M9)
 
 
 
-
 # https://stackoverflow.com/questions/40901445/function-to-calculate-r2-r-squared-in-r
 R2_treino = cor(pred9, DA$PDC) ^ 2
 
@@ -150,6 +149,7 @@ AdjustedR2_treino = 1 - ( (1-rsq_treino)*(1625-1)/(1625-2-1) )
 # R2: The R2 of the model
 # n: The number of observations         = 1625
 # k: The number of predictor variables  = 5
+
 
 
 
