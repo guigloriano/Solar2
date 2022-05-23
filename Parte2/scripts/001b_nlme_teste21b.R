@@ -282,7 +282,7 @@ for(j in 1:length(TodosCaminhos)){
 
 
 
-#### 5.0 - Métricas para o Treino ####
+#### 5.1 - Métricas para o Treino ####
 
 
 # https://stackoverflow.com/questions/40901445/function-to-calculate-r2-r-squared-in-r
@@ -299,11 +299,15 @@ ss_total <- sum((PDC_list_treino - avr_y_actual)^2)
 ss_regression <- sum((pred9_list_treino - avr_y_actual)^2)
 # 2.4. Residual sum of squares
 ss_residuals <- sum((PDC_list_treino - pred9_list_treino)^2)
-# 3. R2 Score
+
+
+###### 5.1.1 - R2 Score (Treino) ######
 r2 <- 1 - ss_residuals / ss_total
 
 
-MSE_treino = (sum(PDC_list_treino - pred9_list_treino)^2)/length(pred9_list_treino)
+###### 5.1.2 - EQM/MSE Treino ######
+mean(EQMi[1:21])
+
 
 # https://www.statology.org/adjusted-r-squared-in-r/
 AdjustedR2_treino = 1 - ( (1-rsq_treino)*(1625-1)/(1625-2-1) )
@@ -316,7 +320,7 @@ AdjustedR2_treino = 1 - ( (1-rsq_treino)*(1625-1)/(1625-2-1) )
 # k: The number of predictor variables  = 5
 
 
-# equação do coeficiente de correlação (abaixo)
+###### 5.1.3 - Coef. de Correlação (Treino) ######
 A_treino = PDC_list_treino - mean(PDC_list_treino)
 B_treino = pred9_list_treino - mean(pred9_list_treino)
 
@@ -331,13 +335,7 @@ r_treino = numerador_treino/denominador_treino
 
 
 
-
-
-
-
-
-
-#### 5.1 - Métricas para o Teste ####
+#### 5.2 - Métricas para o Teste ####
 
 PDC_list_teste
 pred9_list_teste
@@ -345,9 +343,12 @@ pred9_list_teste
 
 rss_test <- sum((pred9_list_teste - PDC_list_teste) ^ 2)  ## residual sum of squares
 tss_test <- sum((PDC_list_teste - mean(PDC_list_teste)) ^ 2)  ## total sum of squares
+
+
+###### 5.2.1 - R2 Score (Teste) ######
 rsq_teste <- 1 - rss_test/tss_test
 
-MSE_teste = (sum(PDC_list_teste - pred9_list_teste)^2)/length(pred9_list_teste)
+
 
 # https://www.statology.org/adjusted-r-squared-in-r/
 AdjustedR2_teste = 1 - ( (1-rsq_teste)*(7970-1)/(7970-2-1) )
@@ -366,7 +367,11 @@ AdjustedR2_teste = 1 - ( (1-rsq_teste)*(7970-1)/(7970-2-1) )
 # y_barra :     média predita 
 
 
-# equação do coeficiente de correlação (abaixo)
+###### 5.2.2 - EQM/MSE Teste ######
+mean(EQMi[22:105])
+
+
+###### 5.2.3 - Coef. de correlação (teste) ######
 A_teste = PDC_list_teste - mean(PDC_list_teste)
 B_teste = pred9_list_teste - mean(pred9_list_teste)
 
@@ -380,10 +385,10 @@ denominador_teste = sqrt( C_teste * D_teste )
 r_teste = numerador_teste/denominador_teste
 
 
+##### 5.3 - Métricas Globais #####
 
 
 
-#### 5.3 - MSE Para Todos os Dados ####
 
 PDC_full <- numeric()
 pred9_full <- numeric()
@@ -391,15 +396,23 @@ pred9_full <- numeric()
 PDC_full <- append(PDC_list_treino, PDC_list_teste)
 pred9_full <- append(pred9_list_treino, pred9_list_teste)
 
-MSE_full = (sum(PDC_full - pred9_full)^2)/length(pred9_full)
+
+
+rss_full <- sum((pred9_full - PDC_full) ^ 2)  ## residual sum of squares
+tss_full <- sum((PDC_full - mean(PDC_full)) ^ 2)  ## total sum of squares
+
+
+###### 5.3.1 - R2 Score (Teste) ######
+rsq_global <- 1 - rss_full/tss_full
 
 
 
+###### 5.3.2 - MSE Global ######
+mean(EQMi)
 
 
-#### 5.4 - Coef. de Relação para Todos os Dados
 
-
+###### 5.3.3 - Coef. de Relação para Todos os Dados #######
 
 A_full = PDC_full - mean(PDC_full)
 B_full = pred9_full - mean(pred9_full)
