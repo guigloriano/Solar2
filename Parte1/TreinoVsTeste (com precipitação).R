@@ -211,12 +211,11 @@ df_63Aux <- distinct(df_63,DIA, .keep_all= TRUE)
 df_84Aux <- distinct(df_84,DIA, .keep_all= TRUE)
 df_105Aux <- distinct(df_105,DIA, .keep_all= TRUE)
 
-df_21Aux
-df_42Aux
-df_63Aux
-df_84Aux
-df_105Aux
-
+max(df_21Aux$PRECIP)
+max(df_42Aux$PRECIP)
+max(df_63Aux$PRECIP)
+max(df_84Aux$PRECIP)
+max(df_105Aux$PRECIP)
 
 
 ##### SALVAR OS ARQUIVOS #####

@@ -86,16 +86,27 @@ DA <- data.frame(DA)
 
 ##### 3.0 - Gráficos dos dias 1 e 2 #####
 plot(DA[id.in[1]:id.fi[1],2], exp(DA[id.in[1]:id.fi[1],6]), type="l", 
-     lwd=2, ylab="Accumulated Solar Power", xlab="Time", xlim=c(0,80), ylim=c(0,330000))
+     lwd=2, ylab="Accumulated Solar Power (W)", xlab="Time", xlim=c(0,80), ylim=c(0,330000))
 points(DA[id.in[1]:id.fi[1],2], exp(DA[id.in[1]:id.fi[1],6]), pch=19)
-        
+grid(nx = NULL, ny = NULL,
+     lty = 2,      # Grid line type
+     col = "gray", # Grid line color
+     lwd = 1)      # Grid line width
+
+
 plot(DA[id.in[2]:id.fi[2],2], exp(DA[id.in[2]:id.fi[2],6]), type="l", 
      lwd=2, ylab="Power Generated", xlab="Time")
 points(DA[id.in[2]:id.fi[2],2], exp(DA[id.in[2]:id.fi[2],6]), pch=19)
-        
+
+
 plot(DA[id.in[1]:id.fi[1],2], DA[id.in[1]:id.fi[1],6], type="l", lwd=2, 
-     ylab="Log of the accumulated Solar Power", xlab="Time", xlim=c(0,80), ylim=c(4,12.7))
+     ylab="Log of the Accumulated Solar Power (W)", xlab="Time", xlim=c(0,80), ylim=c(4,12.7))
 points(DA[id.in[1]:id.fi[1],2], DA[id.in[1]:id.fi[1],6], pch=19)
+grid(nx = NULL, ny = NULL,
+     lty = 2,      # Grid line type
+     col = "gray", # Grid line color
+     lwd = 1)      # Grid line width
+
 
 plot(DA[id.in[2]:id.fi[2],2], DA[id.in[2]:id.fi[2],6], type="l", lwd=2, 
      ylab="Log-measures", xlab="Time")
@@ -372,11 +383,17 @@ id.in <- c(1,id.fi+1)
 par(mai=c(1,1,0.3,0.3))
 res <- as.numeric(residuals(M9))
 plot(pred9, res, ylim=c(-1.5,1.5), ylab="Residuals",xlab="Predicted values")
-
+grid(nx = NULL, ny = NULL,
+     lty = 2,      # Grid line type
+     col = "gray", # Grid line color
+     lwd = 1)      # Grid line width
 
 ####### 5.2 - Grafico dos valores registrados x preditos ####### 
 plot(DA[,6], pred9, ylab="Predicted values", xlab="Observed values")
-          
+grid(nx = NULL, ny = NULL,
+     lty = 2,      # Grid line type
+     col = "gray", # Grid line color
+     lwd = 1)      # Grid line width         
 
 
 ####### 5.3 - Graficos dos 2 Primeiros Dias #######
@@ -400,7 +417,11 @@ nd1 <- length(Do1)
 ## Log-scale
 plot(D[xi1:xf1,2], Do1, col="grey70", pch=19, lwd=2, ylab="Y's values", xlab="Time", xlim=c(0, 77), ylim=c(3,13))
 points(D[xi1:xf1,2], De1, col="black", type="l", lwd=2)
-          
+grid(nx = NULL, ny = NULL,
+     lty = 2,      # Grid line type
+     col = "gray", # Grid line color
+     lwd = 1)      # Grid line width         
+
 ## origina;-scale
 plot(D[xi1:xf1,2], exp(Do1), pch=19, col="grey70", lwd=2, ylab="X", xlab="Tempo", xlim=c(0,length(Do1)))
 points(D[xi1:xf1,2], exp(De1), col="black", type="l", lwd=2)
@@ -435,6 +456,10 @@ nd2 <- length(Do2)
 ## Log-scale
 plot(D[xi2:xf2,2], Do2, col="grey70", pch=19, lwd=2, ylab="Y's values", xlab="Time", xlim=c(0, 77), ylim=c(3,13))
 points(D[xi2:xf2,2], De2, col="black", type="l", lwd=2)
+grid(nx = NULL, ny = NULL,
+     lty = 2,      # Grid line type
+     col = "gray", # Grid line color
+     lwd = 1)      # Grid line width         
 
 
 ## origina;-scale

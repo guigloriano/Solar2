@@ -69,6 +69,44 @@ dev.off()
 
 
 
+
+
+
+eqm_png <- paste ("EQMerror2", ".png", sep="")
+dest_eqm <- paste(graph_extra, eqm_png, sep = "")
+png(filename = dest_eqm, width = 720, height = 480, units = 'px')
+
+data_eqm <- data.frame(cbind(sm, EQMi))
+
+data_eqm <- data_eqm[22:105,]
+
+gp_eqm <- ggplot(data = data_eqm, aes(x = sm), show.legend = FALSE) + theme_bw() +
+  geom_line(aes(y= EQMi, group = 1, color = "Prediction Error"), 
+            size = 0.6, lty = "81") +
+  geom_point(aes(y = EQMi, color = "Prediction Error"), size= 1.0) + 
+  scale_x_continuous(breaks = 3*0:106, expand = c(0.01,0.01)) +
+  #  geom_smooth(aes(y = EQMi, color = "Local Regression Fitting", 
+  #                  method="loess", se = F))+#, linetype = "dashed") +
+  xlab('Days') +   ylab('MSE - Mean Square Error') +
+  theme(text = element_text(size=16),
+        axis.text.x = element_text(angle=45, hjust=1),
+        legend.justification=c(1,0), #legend.position=c(1,0),
+        legend.position = "none",
+        legend.background = element_rect(fill = "lightgray") ) +
+  scale_colour_manual(name=NULL,
+                      values=c("Prediction Error" = "black", 
+                               "Local Regression Fitting" ="red"))
+
+gp_eqm
+print(gp_eqm)
+dev.off()
+
+
+
+
+
+
+
 ###### 2.2.1. - Grafico da Dif. Per. Media Original  (DIM = Exp(DIO/DIP) ####
 dpm_png <- paste ("DifPercEXP_original_105.png", sep="")
 dest_dpm <- paste(graph_extra, dpm_png, sep = "")
@@ -159,11 +197,11 @@ png(filename = dest_dpm, width = 720, height = 480, units = 'px')
         geom_line(aes(x = sm, y = Dio_list, group=2, color = "Observed"), size = 0.7) +
         geom_point(aes(x = sm, y = Dio_list, color = "Observed"), size = 1.5) +
       
-        xlab('Days') + ylab('DC Power') + 
+        xlab('Days') + ylab('Log of the Accumulated Solar Power (W)') + 
         scale_x_continuous(breaks=seq(0, 106, 5))  +
         scale_fill_manual(values=c("#a6cee3","#1f78b4","#b2df8a")) + 
         theme(text = element_text(size=20), axis.text.x = element_text(angle = 45, hjust=1),
-              legend.justification=c(1,1), legend.position=c(.99,.99),
+              legend.justification=c(1,1), legend.position=c(0.999,0.137),
               legend.background = element_rect(fill = "lightgray", size=0.5, 
                                                linetype="solid", colour ="black")) +
       

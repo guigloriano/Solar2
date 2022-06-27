@@ -57,7 +57,7 @@ pred9_list_treino <- numeric()
 PDC_list_teste <- numeric()
 pred9_list_teste <- numeric()
 
-
+lista_massas <- numeric()
 j = 1
 
 for(j in 1:length(TodosCaminhos)){
@@ -80,6 +80,21 @@ for(j in 1:length(TodosCaminhos)){
   
   ##### 1.4 - Remoção da Primeira Coluna (contador de amostras) #####
   ND$X <- NULL     
+  
+  
+  
+  #### TESTE FORÇANDO MA PARA ZERO A CADA CHUVA ACIMA DE 30mm ####
+  
+  
+  
+  if (j > 20 ){
+    ND$MA <- ND$MA - lista_massas[j-1]
+  }
+  
+  
+  lista_massas <- cbind(lista_massas, ND$MA[length(ND$MA)])
+  
+  
   
   
   ##### 1.5 - Remoção dos PDC's = 0 #####
@@ -164,7 +179,7 @@ for(j in 1:length(TodosCaminhos)){
     points(NDA[xi[dia]:xf[dia],2], Dip, col="red", type="l", lwd=2)
     legend("topleft", legend=c("Observado","Esperado"), col=c("black","red"), lty=1, pch=c(1, NA), lwd=2)
     
-    
+    pred9[1422]
     
 #    Dip_list[ (i+(j-1)+(j-1)*20) ] <- sum(Dip)
 #    Dio_list[ (i+(j-1)+(j-1)*20) ] <- sum(Dio)
