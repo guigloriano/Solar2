@@ -132,8 +132,14 @@ png(filename = dest_dpm, width = 720, height = 480, units = 'px')
 dev.off()
 
 
+
+
+## forçar o símbolo de - no eixo negativo 
+unicode_minus = function(x) sub('^-', '\U2212', format(x))
+
+
 ###### 2.2.2- Grafico da Dif. Per. Media Original  ####
-dpm_png <- paste ("DifPerc_original_105.png", sep="")
+dpm_png <- paste ("DifPerc_original_1052.png", sep="")
 dest_dpm <- paste(graph_extra, dpm_png, sep = "")
 png(filename = dest_dpm, width = 720, height = 480, units = 'px')
 
@@ -142,8 +148,8 @@ new_bar_DPM <- data.frame("dia" = seq(1,105), "DPM" = Dim2)
 DPM_Original <- ggplot(data = new_bar_DPM , aes(x=dia, y = DPM, color="gray")) + 
   theme_bw() + geom_bar(stat="identity", position="dodge", color="black",) +
   #  scale_y_continuous(breaks = seq(from = min(Dim), to = max(Dim), by = 1), name = "Percentagem (%)") +
-  scale_y_continuous(limits = c(min(Dim2),max(Dim2)), name = "Percentage (%)") +
-  scale_x_continuous(breaks = 5*0:111, expand = c(0.01,0.01), name = "Days") +
+  scale_y_continuous(limits = c(min(Dim2),max(Dim2)), name = "Percentage (%)", labels = unicode_minus) +
+  scale_x_continuous(breaks = 5*0:111, expand = c(0.01,0.01), name = "Days" ) +
   #  geom_smooth(aes(y = DPM, color = "Local Regression Fitting", method="loess", se = F))+
   #, linetype = "dashed") +
   theme(axis.title.y = element_text(hjust = 0.5, color = 'black', size=20),) + 
@@ -155,6 +161,9 @@ print(DPM_Original)
 
 plot(DPM_Original)
 dev.off()
+
+
+
 
 
 
@@ -184,34 +193,37 @@ dev.off()
 
 
 ###### 2.3 - Grafico: DCPower (Dip x Dio Complet)  ####
-dpm_png <- paste ("DCPower.png", sep="")
-dest_dpm <- paste(graph_extra, dpm_png, sep = "")
-png(filename = dest_dpm, width = 720, height = 480, units = 'px')
+dpm_png <- paste ("DCPower3.png", sep="")
 
-    sm <- seq(1,length(Dip_list))
-    # dev.off()
-    dc_power <- ggplot() + theme_bw() + 
-        geom_line(aes(x = sm, y = Dip_list, group=1, color = "Predicted"), size = 0.7) +
-        geom_point(aes(x = sm, y = Dip_list, color = "Predicted"), size = 1.5) +
-      
-        geom_line(aes(x = sm, y = Dio_list, group=2, color = "Observed"), size = 0.7) +
-        geom_point(aes(x = sm, y = Dio_list, color = "Observed"), size = 1.5) +
-      
-        xlab('Days') + ylab('Log of the Accumulated Solar Power (W)') + 
-        scale_x_continuous(breaks=seq(0, 106, 5))  +
-        scale_fill_manual(values=c("#a6cee3","#1f78b4","#b2df8a")) + 
-        theme(text = element_text(size=20), axis.text.x = element_text(angle = 45, hjust=1),
-              legend.justification=c(1,1), legend.position=c(0.999,0.137),
-              legend.background = element_rect(fill = "lightgray", size=0.5, 
-                                               linetype="solid", colour ="black")) +
-      
-        scale_color_manual(name=NULL,
-                         values=c('Predicted' = 'blue', 'Observed' ='red'))
-    
-    
-    print(dc_power)
-    plot(dc_power)
-    
+# graph_extra <- "D:\\Nova pasta\\"
+
+dest_dpm <- paste(graph_extra, dpm_png, sep = "")
+png(filename = dest_dpm, width = 720, height = 360, units = 'px')
+
+sm <- seq(1,length(Dip_list))
+# dev.off()
+dc_power <- ggplot() + theme_bw() + 
+  geom_line(aes(x = sm, y = Dip_list, group=1, color = "Predicted"), size = 0.8) +
+  geom_point(aes(x = sm, y = Dip_list, color = "Predicted"), size = 2) +
+  
+  geom_line(aes(x = sm, y = Dio_list, group=2, color = "Observed"), size = 0.8) +
+  geom_point(aes(x = sm, y = Dio_list, color = "Observed"), size = 2) +
+  
+  xlab('Days') + ylab('Log of the Accumulated Solar Power (W)') + 
+  scale_x_continuous(breaks=seq(0, 106, 5))  +
+  scale_fill_manual(values=c("#a6cee3","#1f78b4","#b2df8a")) + 
+  theme(text = element_text(size=16.5), axis.text.x = element_text(angle = 45, hjust=1),
+        legend.justification=c(1,1), legend.position=c(0.999,0.18),
+        legend.background = element_rect(fill = "lightgray", size=0.5, 
+                                         linetype="solid", colour ="black")) +
+  
+  scale_color_manual(name=NULL,
+                     values=c('Predicted' = 'blue', 'Observed' ='red'))
+
+
+print(dc_power)
+plot(dc_power)
+
 dev.off()
 dev.off()
 

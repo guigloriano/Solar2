@@ -85,27 +85,80 @@ DA <- data.frame(DA)
 
 
 ##### 3.0 - Gráficos dos dias 1 e 2 #####
+
+fileDest <- paste("D:\\Solar2\\Parte2\\graphs\\", "Fig5a3_AccSolarPower.png", sep = "")
+png(filename = fileDest, width = 625, height = 405, units = 'px')
+
+df_dia1 <- numeric()
+df_dia1 <- data.frame("Time"= DA[id.in[1]:id.fi[1],2], 
+                      "Value" = exp(DA[id.in[1]:id.fi[1],6]))
+
+plot_dia1 <- ggplot(df_dia1, aes(x = Time, y = Value)) +
+                geom_line(size=1) + geom_point(size=3) + theme_bw() +
+                scale_x_continuous(name = "Time") + 
+                scale_y_continuous(name = "Accumulated Solar Power (W)",
+                                   labels = function(l) ifelse(l <= 9999, l, comma(l))) +
+                theme(
+                  axis.text.y = element_text(hjust = 0.5,angle=90, size=18),
+                  axis.text.x = element_text(size=18),
+                  axis.title.x = element_text(hjust = 0.5, size=18),
+                  axis.title.y = element_text(hjust = 0.5, size=18),
+                  plot.title = element_text(hjust = 0.5, size=26)
+                )
+
+plot(plot_dia1)
+dev.off()
+
+
+#plot(DA[id.in[1]:id.fi[1],2], exp(DA[id.in[1]:id.fi[1],6]), type="l", 
+#     lwd=2, ylab="Accumulated Solar Power (W)", xlab="Time", xlim=c(0,80), 
+#     ylim=c(0,330000))
+#points(DA[id.in[1]:id.fi[1],2], exp(DA[id.in[1]:id.fi[1],6]), pch=19)
+#grid(nx = NULL, ny = NULL,
+#     lty = 2,      # Grid line type
+#     col = "gray", # Grid line color
+#     lwd = 1)      # Grid line width
+
+
+fileDest <- paste("D:\\Solar2\\Parte2\\graphs\\", "Fig5b3_LogAccSolarPower.png", sep = "")
+png(filename = fileDest, width = 625, height = 405, units = 'px')
+
+df_dia1 <- numeric()
+df_dia1 <- data.frame("Time"= DA[id.in[1]:id.fi[1],2], 
+                      "Value" = DA[id.in[1]:id.fi[1],6])
+
+plot_dia1_log <- ggplot(df_dia1, aes(x = Time, y = Value)) +
+  geom_line(size=1) + geom_point(size=3) + theme_bw() +
+  scale_x_continuous(name = "Time") + 
+  scale_y_continuous(name = "Log of the Accumulated Solar Power (W)",
+                     labels = function(l) ifelse(l <= 9999, l, comma(l))) +
+  theme(
+    axis.text.y = element_text(hjust = 0.5,angle=90, size=18),
+    axis.text.x = element_text(size=18),
+    axis.title.x = element_text(hjust = 0.5, size=18),
+    axis.title.y = element_text(hjust = 0.5, size=18),
+    plot.title = element_text(hjust = 0.5, size=26)
+  )
+
+plot(plot_dia1_log)
+dev.off()
+
+
+#plot(DA[id.in[1]:id.fi[1],2], DA[id.in[1]:id.fi[1],6], type="l", lwd=2, 
+#     ylab="Log of the Accumulated Solar Power (W)", xlab="Time", xlim=c(0,80), ylim=c(4,12.7))
+#points(DA[id.in[1]:id.fi[1],2], DA[id.in[1]:id.fi[1],6], pch=19)
+#grid(nx = NULL, ny = NULL,
+#     lty = 2,      # Grid line type
+#     col = "gray", # Grid line color
+#     lwd = 1)      # Grid line width
+
+
+
+
 plot(DA[id.in[1]:id.fi[1],2], exp(DA[id.in[1]:id.fi[1],6]), type="l", 
-     lwd=2, ylab="Accumulated Solar Power (W)", xlab="Time", xlim=c(0,80), ylim=c(0,330000))
-points(DA[id.in[1]:id.fi[1],2], exp(DA[id.in[1]:id.fi[1],6]), pch=19)
-grid(nx = NULL, ny = NULL,
-     lty = 2,      # Grid line type
-     col = "gray", # Grid line color
-     lwd = 1)      # Grid line width
-
-
-plot(DA[id.in[2]:id.fi[2],2], exp(DA[id.in[2]:id.fi[2],6]), type="l", 
      lwd=2, ylab="Power Generated", xlab="Time")
-points(DA[id.in[2]:id.fi[2],2], exp(DA[id.in[2]:id.fi[2],6]), pch=19)
+points(DA[id.in[1]:id.fi[1],2], exp(DA[id.in[1]:id.fi[1],6]), pch=19)
 
-
-plot(DA[id.in[1]:id.fi[1],2], DA[id.in[1]:id.fi[1],6], type="l", lwd=2, 
-     ylab="Log of the Accumulated Solar Power (W)", xlab="Time", xlim=c(0,80), ylim=c(4,12.7))
-points(DA[id.in[1]:id.fi[1],2], DA[id.in[1]:id.fi[1],6], pch=19)
-grid(nx = NULL, ny = NULL,
-     lty = 2,      # Grid line type
-     col = "gray", # Grid line color
-     lwd = 1)      # Grid line width
 
 
 plot(DA[id.in[2]:id.fi[2],2], DA[id.in[2]:id.fi[2],6], type="l", lwd=2, 
